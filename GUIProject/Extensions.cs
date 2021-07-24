@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,6 +10,13 @@ namespace GUIProject
 {
     public static class Extensions
     {
+        public static string GetDescription(this Enum value)
+        {
+            DescriptionAttribute description = value.GetType().GetField(value.ToString()).GetCustomAttribute<DescriptionAttribute>();
+            if (description is not null)
+                return description.Description;
+            return "";
+        }
 
         public static ColorScheme GetScheme(this MessageType type)
         {
