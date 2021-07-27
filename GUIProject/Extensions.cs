@@ -63,5 +63,22 @@ namespace GUIProject
                 oldScheme.Apply();
             }
         }
+
+        public static void Apply(this ColorScheme scheme, int x, int y, Action printAction)
+        {
+            (int oldX, int oldY) = Console.GetCursorPosition();
+            Console.SetCursorPosition(x, y);
+
+            if (scheme is not null)
+            {
+                scheme.Apply(printAction);
+            }
+            else
+            {
+                printAction();
+            }
+
+            Console.SetCursorPosition(oldX, oldY);
+        }
     }
 }

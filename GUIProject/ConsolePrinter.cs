@@ -61,7 +61,7 @@ namespace GUIProject
         {
             Console.Write("╚");
             PrintMany('═');
-            Console.Write("╝");
+            Console.WriteLine("╝");
         }
 
         public void PrintEmptyLine()
@@ -78,6 +78,10 @@ namespace GUIProject
             Console.Write("╢");
         }
 
+        public void PrintText(string text)
+        {
+            Console.Write(text);
+        }
 
         public void PrintMany(char ch, int repeats = -2)
         {

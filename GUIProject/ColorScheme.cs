@@ -21,5 +21,8 @@ namespace GUIProject
 
         public static ColorScheme ActiveButtonScheme
             = new ColorScheme(ConsoleColor.White, ConsoleColor.Black);
+
+        public static ColorScheme InputTextScheme
+            = new ColorScheme(ConsoleColor.White, ConsoleColor.DarkYellow);
     }
 }

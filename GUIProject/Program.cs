@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GUIProject.Cars;
+using GUIProject.Forms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -29,12 +31,15 @@ namespace GUIProject
             //    Console.WriteLine("Вы выбрали Да");
             //}
 
-            var result = new Menu("Тут что-то написано. Тут что-то написано.", "Элемент номер раз", "Элемент номер два", "Элемент номер три").Show();
+            //var result = new Menu("Тут что-то написано. Тут что-то написано.", "Элемент номер раз", "Элемент номер два", "Элемент номер три").Show();
 
-            if (result == 0)
-            {
-                Console.WriteLine("Выбран первый элемент");
-            }
+            //if (result == 0)
+            //{
+            //    Console.WriteLine("Выбран первый элемент");
+            //}
+
+            InputForm<Car> form = new("Введите информацию о машине");
+            form.Show();
         }
     }
 }
