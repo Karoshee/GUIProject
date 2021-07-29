@@ -28,7 +28,7 @@ namespace GUIProject.Forms
             Commit = commit;
         }
 
-        public void Input()
+        public bool Input()
         {
             var minPosition = Console.CursorLeft;
             int maxLength = Console.WindowWidth - Console.CursorLeft - 2;
@@ -37,7 +37,8 @@ namespace GUIProject.Forms
             do
             {
                 keyInfo = Console.ReadKey(true);
-
+                if (keyInfo.Key == ConsoleKey.Escape)
+                    return false;
                 if (keyInfo.Key == ConsoleKey.Backspace)
                 {
                     if (Console.CursorLeft > minPosition)
@@ -54,6 +55,8 @@ namespace GUIProject.Forms
                     ColorScheme.InputTextScheme.Apply(() => Console.Write(keyInfo.KeyChar));
                 }
             } while (keyInfo.Key != ConsoleKey.Enter || !CanCommit());
+            Commit?.Invoke(Text);
+            return true;
         }
 
         public virtual bool FilterChar(char ch) => true;

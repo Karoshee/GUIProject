@@ -39,7 +39,10 @@ namespace GUIProject
             //}
 
             InputForm<Car> form = new("Введите информацию о машине");
-            form.Show();
+            if (form.Show())
+            {
+                var car = form.Value;
+            }
         }
     }
 }
