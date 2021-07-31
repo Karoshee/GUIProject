@@ -34,6 +34,8 @@ namespace GUIProject
 
         public int Show()
         {
+            Printer.Clear();
+
             Printer.PrintTopEdge();
 
             Printer.PrintEmptyLine();

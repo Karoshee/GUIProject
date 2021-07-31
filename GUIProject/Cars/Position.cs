@@ -13,5 +13,10 @@ namespace GUIProject.Cars
             var powedDistance = (X - from.X) * (X - from.X) + (Y - from.Y) * (Y - from.Y);
             return (decimal)Math.Sqrt((double)powedDistance);
         }
+
+        public override string ToString()
+        {
+            return $"({X};{Y})";
+        }
     }
 }

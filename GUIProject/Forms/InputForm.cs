@@ -58,6 +58,8 @@ namespace GUIProject.Forms
 
         public bool Show()
         {
+            Printer.Clear();
+
             Printer.PrintTopEdge();
 
             Printer.PrintEmptyLine();

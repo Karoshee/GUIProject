@@ -25,5 +25,10 @@ namespace GUIProject.Cars
         public DateTime ReleaseDate { get; set; }
 
         public Position CurrentPosition { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Brand} - {ReleaseDate:dd.MM.yyyy} {CurrentPosition}";
+        }
     }
 }

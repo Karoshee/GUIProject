@@ -18,9 +18,13 @@ namespace GUIProject.Orders
 
         public OrderState State { get; private set; }
 
-        public Order(Position from, Position to)
+        public Order()
         {
             Id = Guid.NewGuid();
+        }
+
+        public Order(Position from, Position to) : base()
+        {
             From = from;
             To = to;
         }
@@ -66,6 +70,11 @@ namespace GUIProject.Orders
                 yield return current;
                 current = current.OldOrder;
             }
+        }
+
+        public override string ToString()
+        {
+            return $"Заказ № {Id} ({State})";
         }
     }
 }
