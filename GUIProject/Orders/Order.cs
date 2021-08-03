@@ -10,6 +10,8 @@ namespace GUIProject.Orders
 
         public Guid Id { get; set; }
 
+        public int Number { get; }
+
         public Position From { get; private set; }
 
         public Position To { get; private set; }
@@ -21,6 +23,11 @@ namespace GUIProject.Orders
         public Order()
         {
             Id = Guid.NewGuid();
+        }
+
+        public Order(Numerator numerator) : base()
+        {
+            Number = numerator.GetNumber(typeof(Order));
         }
 
         public Order(Position from, Position to) : base()
