@@ -1,16 +1,19 @@
 ﻿using GUIProject.Cars;
+using GUIProject.Common;
+using GUIProject.Forms;
 using System;
 using System.Collections.Generic;
 
 namespace GUIProject.Orders
 {
-    public class Order
+    public class Order : IHaveId, IHaveNumber
     {
         private Order OldOrder { get; set; }
 
         public Guid Id { get; set; }
 
-        public int Number { get; }
+        [InputIgnore]
+        public int Number { get; set; }
 
         public Position From { get; private set; }
 
@@ -23,11 +26,6 @@ namespace GUIProject.Orders
         public Order()
         {
             Id = Guid.NewGuid();
-        }
-
-        public Order(Numerator numerator) : base()
-        {
-            Number = numerator.GetNumber(typeof(Order));
         }
 
         public Order(Position from, Position to) : base()
@@ -81,7 +79,7 @@ namespace GUIProject.Orders
 
         public override string ToString()
         {
-            return $"Заказ № {Id} ({State})";
+            return $"Заказ № {Number} ({State})";
         }
     }
 }

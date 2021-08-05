@@ -12,21 +12,28 @@ namespace GUIProject.Navigation
     {
         private const string _CAR_PARK = "Парк машин";
 
-        public List<Car> Cars { get; }
+        public OurData Data { get; }
 
-        public CarMenu(List<Car> cars) : base(_CAR_PARK)
+        public View<Car> View { get; }
+
+        public CarMenu(OurData data) : base(_CAR_PARK)
         {
-            Cars = cars;
+            Data = data;
+            View = new View<Car>("Информация о машине");
             AddItems(
                 ("Просмотр машин", ViewCars),
                 ("Ввод новой машины", InputNewCar),
-                ("В главное меню", Empty));
+                ("В главное меню", Empty));            
         }
 
         public void ViewCars()
         {
             var newMenu = new NavigationMenu<Car>("Все машины, которые у нас есть");
-            newMenu.BindItems(Cars, selectAction: c => newMenu.Show());
+            newMenu.BindItems(Data.GetData<Car>(), selectAction: c =>
+            {
+                View.Show(c);
+                newMenu.Show();
+            });
             newMenu.AddItems(("Возврат", Empty));
             newMenu.Show();
         }
@@ -36,7 +43,8 @@ namespace GUIProject.Navigation
             var carForm = new InputForm<Car>(Properties.Resources.NewCarText);
             if (carForm.Show())
             {
-                Cars.Add(carForm.Value);
+                Data.GetData<Car>().Add(carForm.Value);
+                Data.SaveItem(carForm.Value);
             }
             this.Show();
         }

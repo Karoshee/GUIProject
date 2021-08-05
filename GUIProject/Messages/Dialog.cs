@@ -73,8 +73,11 @@ namespace GUIProject
                 .Show();
         }
 
-        public void PrintButtons(int width = 0)
+        public void PrintButtons(int width = 0, int y = 0)
         {
+            if (y == 0)
+                y = Lines.Length + 3;
+
             var captions = Buttons.Select(btn => btn.GetDescription()).ToArray();
 
             if (captions == null || captions.Length == 0)
@@ -88,7 +91,7 @@ namespace GUIProject
 
             for (int i = 0; i < captions.Length; i++)
             {
-                Printer.PrintButton(captions[i], xPosintion, Lines.Length + 3, i == ActiveButtonIndex); ;
+                Printer.PrintButton(captions[i], xPosintion, y, i == ActiveButtonIndex); ;
                 xPosintion += captions[i].Length + 5;
             }
         }

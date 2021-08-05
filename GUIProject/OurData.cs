@@ -1,87 +1,71 @@
 ﻿using GUIProject.Cars;
+using GUIProject.Common;
 using GUIProject.Orders;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace GUIProject
 {
     public class OurData
     {
-        public List<Car> Cars { get; private set; }
+        private Dictionary<Type, IList> _Data { get; }
 
-        public List<Order> Orders { get; private set; }
+        public Paths Paths { get; }
 
-        public List<AssignedOrder> AssignedOrders { get; private set; }
+        public Numerator Numerator { get; }
 
-        public OurData()
+        public OurData(Paths paths, Numerator numerator)
         {
-            Cars = LoadCars();
-            Orders = LoadOrders();
-            AssignedOrders = LoadAssignedOrders();            
+            _Data = new Dictionary<Type, IList>();
+            Paths = paths;
+            Numerator = numerator;
         }
 
-        private static List<AssignedOrder> LoadAssignedOrders()
+        public IList<T> GetData<T>()
         {
-            return new List<AssignedOrder>();
+            Type t = typeof(T);
+            return (IList<T>)_Data[t];
         }
 
-        private static List<Order> LoadOrders()
+        public void LoadData()
         {
-            return new List<Order>();
+            _Data.Add(typeof(Car), _Load<Car>());
+            _Data.Add(typeof(Order), _Load<Order>());
+            _Data.Add(typeof(AssignedOrder), _Load<AssignedOrder>());
         }
 
-        private static List<Car> LoadCars()
+        private List<T> _Load<T>() where T : IHaveId
         {
-            return new List<Car>
+            string directory = Paths.GetDirectory<T>();
+            string[] files = Directory.GetFiles(directory);
+            return files
+                .Select(filename => File.ReadAllText(filename, Encoding.Default))
+                .Select(text => JsonSerializer.Deserialize<T>(text, GetOptions()))
+                .ToList();
+        }
+
+        public void SaveItem<T>(T item) where T: IHaveId
+        {
+            string filename = Path.Combine(Paths.GetDirectory<T>(), item.Id + ".json");
+            if (item is IHaveNumber numbered)
             {
-                new Car
-                {
-                    Brand = "Car1",
-                    BaseConsumption = 0.1M,
-                    CurrentPosition = new Position(12, 19),
-                    FuelTank = 45,
-                    PlateNumber = "x192xx",
-                    ReleaseDate = new DateTime(2000, 1, 1)
-                },
-                new Car
-                {
-                    Brand = "Car2",
-                    BaseConsumption = 0.1M,
-                    CurrentPosition = new Position(20, 19),
-                    FuelTank = 45,
-                    PlateNumber = "x102xx",
-                    ReleaseDate = new DateTime(2000, 1, 1)
-                },
-                new Car
-                {
-                    Brand = "Car3",
-                    BaseConsumption = 0.1M,
-                    CurrentPosition = new Position(12, 18),
-                    FuelTank = 45,
-                    PlateNumber = "x112xx",
-                    ReleaseDate = new DateTime(2000, 1, 1)
-                },
-                new Car
-                {
-                    Brand = "Car4",
-                    BaseConsumption = 0.1M,
-                    CurrentPosition = new Position(1, 19),
-                    FuelTank = 45,
-                    PlateNumber = "x123xx",
-                    ReleaseDate = new DateTime(2000, 1, 1)
-                },
-                new Car
-                {
-                    Brand = "Car5",
-                    BaseConsumption = 0.1M,
-                    CurrentPosition = new Position(10, 11),
-                    FuelTank = 45,
-                    PlateNumber = "x122xy",
-                    ReleaseDate = new DateTime(2000, 1, 1)
-                },
+                numbered.Number = Numerator.GetNumber(item.GetType());
+            }
+            File.WriteAllText(filename, JsonSerializer.Serialize(item, GetOptions()), Encoding.Default);
+        }
+
+        private static JsonSerializerOptions GetOptions()
+        {
+            return new JsonSerializerOptions(JsonSerializerDefaults.General)
+            {
+                Encoder = JavaScriptEncoder.Default
             };
         }
     }
