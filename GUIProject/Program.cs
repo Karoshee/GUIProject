@@ -1,5 +1,5 @@
 ﻿using GUIProject.Cars;
-using GUIProject.Forms;
+using OurUI.Forms;
 using GUIProject.Navigation;
 using GUIProject.Orders;
 using System;
@@ -16,7 +16,7 @@ namespace GUIProject
     {
         static void Main(string[] args)        
         {
-            var paths = new Paths();
+            var paths = new Paths();             
             
             var numerator = new Numerator(paths);
             numerator.LoadNumbers();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OurUI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace GUIProject.Navigation
     {
         protected Menu _Menu { get; set; }
 
-        public string Message { get; set; }        
+        public string Message { get; set; }
 
         protected Dictionary<string, Action> _Items { get; set; }
 

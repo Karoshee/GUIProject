@@ -9,6 +9,7 @@ namespace GUIProject.Orders
     public enum OrderState : byte
     {
         New = 0,
+        Counted,
         Queued,
         Active,
         Closed,

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace GUIProject
+namespace OurUI
 {
     public enum Button
     {

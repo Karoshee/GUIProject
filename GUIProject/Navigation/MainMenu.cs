@@ -1,11 +1,13 @@
 ﻿using GUIProject.Cars;
-using GUIProject.Forms;
+using OurUI.Forms;
 using GUIProject.Orders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OurUI;
+using GUIProject.Logic;
 
 namespace GUIProject.Navigation
 {
@@ -25,6 +27,7 @@ namespace GUIProject.Navigation
                 ("Парк машин", ShowCarPark),
                 ("Добавление заказа", AddOrder),
                 ("Назначение заказа", SetAssignedOrder),
+                ("Рассчитать стоимость", CountPrice),
                 ("Выход из программы", ExitQuestion));            
         }
 
@@ -69,6 +72,23 @@ namespace GUIProject.Navigation
             Data.SaveItem(assignedOrder);
             Dialog.ShowMessage(assignedOrder.ToDisplayString());
             Show();
+        }
+
+        public void CountPrice()
+        {
+            var orderForm = new InputForm<Order>("Введите информацию о маршруте");
+            if (orderForm.Show())
+            {
+                Order newOrder = orderForm.Value;
+                newOrder.SetState(OrderState.Counted);
+                Data.GetData<Order>().Add(newOrder);
+                Data.SaveItem(newOrder);
+                var car = Data.GetData<Car>().First();
+                PriceCounter counter = new();
+                var price = counter.Count(newOrder, car);
+                Dialog.ShowMessage($"Заказ обойдётся в {price} р.");
+                Show();
+            }
         }
 
         public void ExitQuestion()

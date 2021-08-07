@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GUIProject.Forms
+namespace OurUI.Forms
 {
     public class View<T> : Dialog
     {

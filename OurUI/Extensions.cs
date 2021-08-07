@@ -1,4 +1,4 @@
-﻿using GUIProject.Forms;
+﻿using OurUI.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GUIProject
+namespace OurUI
 {
     public static class Extensions
     {

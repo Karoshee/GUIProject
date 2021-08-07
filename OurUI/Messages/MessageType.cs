@@ -1,4 +1,4 @@
-﻿namespace GUIProject
+﻿namespace OurUI
 {
     public enum MessageType : byte
     {

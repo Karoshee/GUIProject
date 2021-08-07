@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GUIProject
+namespace OurUI
 {
     public abstract class Message
     {

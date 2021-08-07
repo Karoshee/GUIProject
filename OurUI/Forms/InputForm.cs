@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GUIProject.Forms
+namespace OurUI.Forms
 {
     public class InputForm<T> : Message where T: new()
     {
@@ -54,6 +54,10 @@ namespace GUIProject.Forms
             else if (property.PropertyType.Name == nameof(DateTime))
             {
                 return new DateElement(property.GetHint(), value => property.SetValue(Value, value));
+            }
+            else if (property.PropertyType.Name == nameof(Position))
+            {
+                return new PositionElement(property.GetHint(), value => property.SetValue(Value, value));
             }
             return null;
         }

@@ -1,6 +1,7 @@
 ﻿using GUIProject.Cars;
 using GUIProject.Common;
-using GUIProject.Forms;
+using OurUI;
+using OurUI.Forms;
 using System;
 using System.Collections.Generic;
 
@@ -15,11 +16,14 @@ namespace GUIProject.Orders
         [InputIgnore]
         public int Number { get; set; }
 
+        [Hint("Точка отправления")]
         public Position From { get; private set; }
 
+        [Hint("Точка прибытия")]
         public Position To { get; private set; }
 
-        public string ContactPhone { get; set; }
+        [InputIgnore]
+        public string ContactPhone { get; set; } = "90998743434";
 
         public OrderState State { get; private set; }
 

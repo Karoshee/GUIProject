@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GUIProject
+namespace OurUI
 {
     public class ColorScheme
     {

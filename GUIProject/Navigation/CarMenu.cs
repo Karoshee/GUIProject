@@ -1,5 +1,6 @@
 ﻿using GUIProject.Cars;
-using GUIProject.Forms;
+using OurUI;
+using OurUI.Forms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace GUIProject.Navigation
     {
         private const string _CAR_PARK = "Парк машин";
 
+        private Random rnd = new Random();
+
         public OurData Data { get; }
 
         public View<Car> View { get; }
@@ -23,6 +26,7 @@ namespace GUIProject.Navigation
             AddItems(
                 ("Просмотр машин", ViewCars),
                 ("Ввод новой машины", InputNewCar),
+                ("Перемещение машины", MoveCar),
                 ("В главное меню", Empty));            
         }
 
@@ -47,6 +51,20 @@ namespace GUIProject.Navigation
                 Data.SaveItem(carForm.Value);
             }
             this.Show();
+        }
+
+        public void MoveCar()
+        {
+            var carPositionMenu = new NavigationMenu<Car>("Выберите машину, которую хотите переместить");
+            carPositionMenu.BindItems(Data.GetData<Car>(), selectAction: c =>
+            {
+                c.CurrentPosition = new(rnd.Next(0, 100000), rnd.Next(1, 99999));
+                Data.SaveItem(c);
+                View.Show(c);
+                this.Show();
+            });
+            carPositionMenu.AddItems(("Отмена", Empty));
+            carPositionMenu.Show();
         }
     }
 }

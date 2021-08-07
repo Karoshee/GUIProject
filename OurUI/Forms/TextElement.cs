@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GUIProject.Forms
+namespace OurUI.Forms
 {
     public class TextElement
     {
@@ -17,6 +17,8 @@ namespace GUIProject.Forms
         public string Text => _inputText.ToString();
 
         private Action<string> Commit { get; }
+        public int MinPosition { get; protected set; }
+        public int MaxLength { get; protected set; }
 
         protected TextElement(string hint)
         {
@@ -28,10 +30,13 @@ namespace GUIProject.Forms
             Commit = commit;
         }
 
-        public bool Input()
+        public virtual bool Input()
         {
-            var minPosition = Console.CursorLeft;
-            int maxLength = Console.WindowWidth - Console.CursorLeft - 2;
+            if (MinPosition == 0)
+                MinPosition = Console.CursorLeft;
+
+            if (MaxLength == 0)
+                MaxLength = Console.WindowWidth - Console.CursorLeft - 2;
 
             ConsoleKeyInfo keyInfo;
             do
@@ -41,7 +46,7 @@ namespace GUIProject.Forms
                     return false;
                 if (keyInfo.Key == ConsoleKey.Backspace)
                 {
-                    if (Console.CursorLeft > minPosition)
+                    if (Console.CursorLeft > MinPosition)
                     {
                         _inputText.Remove(_inputText.Length - 1, 1);
                         Console.CursorLeft--;
@@ -49,7 +54,7 @@ namespace GUIProject.Forms
                         Console.CursorLeft--;
                     }
                 }
-                else if (maxLength > _inputText.Length && FilterChar(keyInfo.KeyChar))
+                else if (MaxLength > _inputText.Length && FilterChar(keyInfo.KeyChar))
                 {
                     _inputText.Append(keyInfo.KeyChar);
                     ColorScheme.InputTextScheme.Apply(() => Console.Write(keyInfo.KeyChar));
