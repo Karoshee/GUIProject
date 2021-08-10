@@ -46,7 +46,7 @@ namespace OurUI.Forms
                     return false;
                 if (keyInfo.Key == ConsoleKey.Backspace)
                 {
-                    if (Console.CursorLeft > MinPosition)
+                    if (Console.CursorLeft > MinPosition && _inputText.Length > 0)
                     {
                         _inputText.Remove(_inputText.Length - 1, 1);
                         Console.CursorLeft--;

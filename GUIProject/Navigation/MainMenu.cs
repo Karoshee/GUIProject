@@ -25,6 +25,7 @@ namespace GUIProject.Navigation
             CarMenu = carMenu;
             AddItems(
                 ("Парк машин", ShowCarPark),
+                ("Заказы в работе", ShowAssignedOrders),
                 ("Добавление заказа", AddOrder),
                 ("Назначение заказа", SetAssignedOrder),
                 ("Рассчитать стоимость", CountPrice),
@@ -37,6 +38,18 @@ namespace GUIProject.Navigation
             Show();
         }
 
+        public void ShowAssignedOrders()
+        {
+            var newMenu = new NavigationMenu<AssignedOrder>("Заказы в работе");
+            newMenu.BindItems(Data.GetData<AssignedOrder>(), selectAction: c =>
+            {
+                newMenu.Show();
+            });
+            newMenu.AddItems(("Возврат", Show));
+            newMenu.Show();
+            Show();
+        }
+
         public void AddOrder()
         {
             var orderForm = new InputForm<Order>("Введите информацию о заказе");
@@ -44,8 +57,22 @@ namespace GUIProject.Navigation
             {
                 Order newOrder = orderForm.Value;
                 Data.GetData<Order>().Add(newOrder);
+                Car selectedCar = 
+                    new CarSearcher()
+                        .FindCarFromOrders(Data.GetData<AssignedOrder>(), Data.GetData<Car>());
+                var newAssignedOrder = new AssignedOrder
+                {
+                    Car = selectedCar,
+                    Order = newOrder
+                };
+                if (Data.GetActiveOrder(selectedCar) is null)
+                    newOrder.SetState(OrderState.Active);
+                else
+                    newOrder.SetState(OrderState.Queued);
                 Data.SaveItem(newOrder);
-                Dialog.ShowMessage("Создан новый заказ " + newOrder);
+                Data.SaveItem(newAssignedOrder);
+                var averangeTime = new TimeCounter().GetChainTime(selectedCar, Data.GetData<AssignedOrder>());
+                Dialog.ShowMessage($"Создан новый заказ {newOrder}, назначен {selectedCar}, будет выполен примерно через {averangeTime.TotalHours} часов");
                 Show();
             }
         }
@@ -68,8 +95,20 @@ namespace GUIProject.Navigation
                 Show();
                 return;
             }
-            var assignedOrder = new AssignedOrder(Data.GetData<Car>()[index], selectedOrder);
+
+            var selectedCar = Data.GetData<Car>()[index];
+            var assignedOrder = new AssignedOrder()
+            {
+                Car = selectedCar,
+                Order = selectedOrder
+            };
+            if (Data.GetActiveOrder(selectedCar) is null)
+                selectedOrder.SetState(OrderState.Active);
+            else
+                selectedOrder.SetState(OrderState.Queued);
+            Data.SaveItem(selectedOrder);
             Data.SaveItem(assignedOrder);
+            Data.GetData<AssignedOrder>().Add(assignedOrder);
             Dialog.ShowMessage(assignedOrder.ToDisplayString());
             Show();
         }
@@ -83,7 +122,9 @@ namespace GUIProject.Navigation
                 newOrder.SetState(OrderState.Counted);
                 Data.GetData<Order>().Add(newOrder);
                 Data.SaveItem(newOrder);
-                var car = Data.GetData<Car>().First();
+                Car car = 
+                    new CarSearcher()
+                        .FindCar(Data.GetData<Car>(), newOrder);
                 PriceCounter counter = new();
                 var price = counter.Count(newOrder, car);
                 Dialog.ShowMessage($"Заказ обойдётся в {price} р.");

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GUIProject.Cars
 {
-    public class Car : IHaveId
+    public record Car : IHaveId
     {
         [Hint("Введите бренд")]
         [Description("Бренд")]
@@ -35,11 +35,17 @@ namespace GUIProject.Cars
         [Description("Местонахождение")]
         public Position CurrentPosition { get; set; }
 
+        [Hint("Введите среднюю скорость")]
+        [Description("Средняя скорость")]
+        public decimal Speed { get; set; }
+
+
         public Guid Id { get; set; } = Guid.NewGuid();
 
         public override string ToString()
         {
             return $"{Brand} - {ReleaseDate:dd.MM.yyyy} {CurrentPosition}";
         }
+
     }
 }

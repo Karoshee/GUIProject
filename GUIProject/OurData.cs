@@ -38,7 +38,13 @@ namespace GUIProject
         {
             _Data.Add(typeof(Car), _Load<Car>());
             _Data.Add(typeof(Order), _Load<Order>());
-            _Data.Add(typeof(AssignedOrder), _Load<AssignedOrder>());
+
+            _Data.Add(typeof(AssignedOrder), _Load<AssignedOrderFile>().Select(item => new AssignedOrder() 
+            {
+                Id = item.Id,
+                Car = GetData<Car>().First(c => c.Id == item.CarId),
+                Order = GetData<Order>().First(o => o.Id == item.OrderId),
+            }).ToList());
         }
 
         private List<T> _Load<T>() where T : IHaveId
@@ -59,6 +65,20 @@ namespace GUIProject
                 numbered.Number = Numerator.GetNumber(item.GetType());
             }
             File.WriteAllText(filename, JsonSerializer.Serialize(item, GetOptions()), Encoding.Default);
+        }
+
+        public void SaveItem(AssignedOrder order)
+        {
+            string filename = Path.Combine(Paths.GetDirectory<AssignedOrder>(), order.Id + ".json");
+            order.Number = Numerator.GetNumber(order.GetType());
+            File.WriteAllText(filename, JsonSerializer.Serialize(order.GetDataFroFile(), GetOptions()), Encoding.Default);
+        }
+
+        public AssignedOrder GetActiveOrder(Car car)
+        {
+            return GetData<AssignedOrder>()
+                .Where(o => o.Car.Id == car.Id && o.Order.State == OrderState.Active)
+                .FirstOrDefault();
         }
 
         private static JsonSerializerOptions GetOptions()

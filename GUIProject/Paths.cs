@@ -23,6 +23,7 @@ namespace GUIProject
                 { typeof(Car), Path.Combine(BaseDirectory, "Cars") },
                 { typeof(Order), Path.Combine(BaseDirectory, "Orders") },
                 { typeof(AssignedOrder), Path.Combine(BaseDirectory, "AssignedOrders") },
+                { typeof(AssignedOrderFile), Path.Combine(BaseDirectory, "AssignedOrders") },
             };
             _CheckDirectories();
         }
