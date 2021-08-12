@@ -39,6 +39,7 @@ namespace OurUI.Forms
                 {
                     XPosition = digit;
                     Console.CursorLeft = MinPosition + MaxLength + 1;
+                    _inputText.Clear();
                     MinPosition = Console.CursorLeft;
                     CanComplete = true;
                 }

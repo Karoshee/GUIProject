@@ -57,9 +57,19 @@ namespace GUIProject.Navigation
             {
                 Order newOrder = orderForm.Value;
                 Data.GetData<Order>().Add(newOrder);
+                
                 Car selectedCar = 
                     new CarSearcher()
                         .FindCarFromOrders(Data.GetData<AssignedOrder>(), Data.GetData<Car>());
+
+                if (selectedCar is null)
+                {
+                    Data.SaveItem(newOrder);
+                    Dialog.ShowMessage($"Создан новый заказ {newOrder}");
+                    Show();
+                    return;
+                }
+
                 var newAssignedOrder = new AssignedOrder
                 {
                     Car = selectedCar,
@@ -71,6 +81,7 @@ namespace GUIProject.Navigation
                     newOrder.SetState(OrderState.Queued);
                 Data.SaveItem(newOrder);
                 Data.SaveItem(newAssignedOrder);
+                Data.GetData<AssignedOrder>().Add(newAssignedOrder);
                 var averangeTime = new TimeCounter().GetChainTime(selectedCar, Data.GetData<AssignedOrder>());
                 Dialog.ShowMessage($"Создан новый заказ {newOrder}, назначен {selectedCar}, будет выполен примерно через {averangeTime.TotalHours} часов");
                 Show();

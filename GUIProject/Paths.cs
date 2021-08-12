@@ -3,6 +3,7 @@ using GUIProject.Orders;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Abstractions;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,8 +17,12 @@ namespace GUIProject
 
         private Dictionary<Type, string> _Directories { get; }
 
-        public Paths()
+        private IDirectory _Directory { get; }
+
+        public Paths(IDirectory directory)
         {
+            _Directory = directory;
+
             _Directories = new Dictionary<Type, string>
             {
                 { typeof(Car), Path.Combine(BaseDirectory, "Cars") },
@@ -36,13 +41,13 @@ namespace GUIProject
 
         private void _CheckDirectories()
         {
-            if (!Directory.Exists(BaseDirectory))
-                Directory.CreateDirectory(BaseDirectory);
+            if (!_Directory.Exists(BaseDirectory))
+                _Directory.CreateDirectory(BaseDirectory);
 
             foreach (string filename in _Directories.Values)
             {
-                if (!Directory.Exists(filename))
-                    Directory.CreateDirectory(filename);
+                if (!_Directory.Exists(filename))
+                    _Directory.CreateDirectory(filename);
             }
         }
     }

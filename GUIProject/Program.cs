@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.IO.Abstractions;
 
 namespace GUIProject
 {
@@ -16,12 +17,14 @@ namespace GUIProject
     {
         static void Main(string[] args)        
         {
-            var paths = new Paths();             
+            IFileSystem fileSystem = new FileSystem();
+
+            var paths = new Paths(fileSystem.Directory);             
             
             var numerator = new Numerator(paths);
             numerator.LoadNumbers();
 
-            var data = new OurData(paths, numerator);
+            var data = new OurData(paths, numerator, fileSystem);
             data.LoadData();
 
             var carMenu = new CarMenu(data);

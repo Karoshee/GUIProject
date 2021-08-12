@@ -29,7 +29,7 @@ namespace GUIProject.Logic
 
         public Car FindCarFromOrders(IEnumerable<AssignedOrder> orders, IEnumerable<Car> cars)
         {
-            if (orders is null || orders.Any())
+            if (orders is null || orders.Any() == false)
                 return cars.FirstOrDefault();
 
             var groups = orders

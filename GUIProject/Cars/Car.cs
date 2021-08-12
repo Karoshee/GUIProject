@@ -33,6 +33,7 @@ namespace GUIProject.Cars
         public DateTime ReleaseDate { get; set; }
 
         [Description("Местонахождение")]
+        [Hint("Введите местоположение")]
         public Position CurrentPosition { get; set; }
 
         [Hint("Введите среднюю скорость")]

@@ -26,7 +26,7 @@ namespace GUIProject.Orders
             return $"Заказ {Order.Number} выполняет машина {Car}";
         }
 
-        public AssignedOrderFile GetDataFroFile()
+        public AssignedOrderFile GetDataFromFile()
         {
             return new()
             {

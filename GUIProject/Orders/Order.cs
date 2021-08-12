@@ -7,8 +7,11 @@ using System.Collections.Generic;
 
 namespace GUIProject.Orders
 {
-    public class Order : IHaveId, IHaveNumber
+    public record Order : IHaveId, IHaveNumber
     {
+        private Position _to;
+        private Position _from;
+
         private Order OldOrder { get; set; }
 
         public Guid Id { get; set; }
@@ -17,15 +20,33 @@ namespace GUIProject.Orders
         public int Number { get; set; }
 
         [Hint("Точка отправления")]
-        public Position From { get; private set; }
+        public Position From
+        {
+            get => _from; 
+            set
+            {
+                if (From is not null)
+                    SaveToHistory();
+                _from = value;
+            }
+        }
 
         [Hint("Точка прибытия")]
-        public Position To { get; private set; }
+        public Position To
+        {
+            get => _to;
+            set
+            {
+                if (To is not null)
+                    SaveToHistory();
+                _to = value;
+            }
+        }
 
         [InputIgnore]
         public string ContactPhone { get; set; } = "90998743434";
 
-        public OrderState State { get; private set; }
+        public OrderState State { get; set; }
 
         public Order()
         {
@@ -38,7 +59,7 @@ namespace GUIProject.Orders
             To = to;
         }
 
-        private Order(Order oldOrder)
+        protected Order(Order oldOrder)
         {
             Id = oldOrder.Id;
             From = oldOrder.From;
@@ -49,12 +70,6 @@ namespace GUIProject.Orders
         public void SetState(OrderState state)
         {
             State = state;
-        }
-
-        public void ChangeDestination(Position newDestination)
-        {
-            SaveToHistory();
-            To = newDestination;
         }
 
         private void SaveToHistory()
